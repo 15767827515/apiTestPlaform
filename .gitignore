@@ -1,0 +1,12 @@
+# Ignore virtual environment directories
+.idea/
+Lib/
+Scripts/
+__pycache__/
+
+# Ignore other temporary files
+*.log
+*.tmp
+
+# Track all other files
+!*
