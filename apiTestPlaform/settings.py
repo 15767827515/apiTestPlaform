@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     # 注册测试平台模块
     "BugManage",
     "Cronjob",
-    "scenes",
+    "TestScenes",
     "TestInterface",
     "Testproject",
     "TestTask",

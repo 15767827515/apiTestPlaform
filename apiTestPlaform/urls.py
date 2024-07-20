@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+from TestScenes.views import UpdateSceneCaseOrderView
 
 from users.views import LoginView
 
@@ -27,13 +28,16 @@ urlpatterns = [
     # 请求刷新token路径
     path('api/users/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     # 校验token路径
-    path('api/users/token/verify/', TokenVerifyView.as_view(), name='token_verify')
+    path('api/users/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    #注册修改业务流用例顺序的接口路由
+    path('api/testFlow/update_scenes_case_order/', UpdateSceneCaseOrderView.as_view(), name='update_scenes_case_order'),
 
 ]
 
 # 导入drf的router和自定义的视图集
 from Testproject.views import TestProjectView,TestEnvView,TestFileView
 from TestInterface.views import TestInterfaceView,TestInterfaceCaseViewSet
+from TestScenes.views import  ScenesViewSet,SceneToCaseViewSet
 from rest_framework import routers
 
 # 实例化louters
@@ -48,6 +52,12 @@ routers.register("api/testPro/files", TestFileView)
 routers.register('api/TestInterface/interface',TestInterfaceView)
 #注册接口测试用例管理的路由
 routers.register('api/TestInterface/case',TestInterfaceCaseViewSet)
+#注册接口业务流管理路由
+routers.register('api/testFlow/scenes',ScenesViewSet)
+#注册业务流用例管理路由
+routers.register('api/testFlow/cases',SceneToCaseViewSet)
+
+
 
 
 

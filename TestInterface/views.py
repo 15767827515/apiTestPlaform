@@ -1,6 +1,6 @@
 from TestInterface.models import TestInterface, TestInterfaceCaseModel
 from TestInterface.serializer import TestInterfaceSerializer, TestInterfaceCaseSerializer, \
-    TestInterfaceCaseListSerializer, TestInterfaceCaseDetailSerializer
+    TestInterfaceCaseListSerializer, TestInterfaceCaseDetailSerializer,TestInterfaceExrendListSerializer
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework import permissions
@@ -22,6 +22,13 @@ class TestInterfaceView(mixins.CreateModelMixin,
     permission_classes = [permissions.IsAuthenticated]
     # 增加过滤字段
     filterset_fields = ["project"]
+
+    #重写get_serializer_class方法，根据请求类型去获取不同的序列化器
+    def get_serializer_class(self):
+        if self.action=="list":
+            return TestInterfaceExrendListSerializer
+        else:
+            return self.serializer_class
 
     class Meta:
         model = TestInterface
