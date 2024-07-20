@@ -15,9 +15,10 @@ class TestInterfaceCaseSerializer(serializers.ModelSerializer):
 
 
 class TestInterfaceCaseListSerializer(serializers.ModelSerializer):
+    interface=TestInterfaceSerializer()
     class Meta:
         model = TestInterfaceCaseModel
-        fields = ["id", "title"]
+        fields = "__all__"
 
 
 # 重新定义的给测试用例详情方法的序列化器，返回带有TestInterfaceSerializer序列化字段的信息
@@ -32,7 +33,7 @@ class TestInterfaceCaseDetailSerializer(serializers.ModelSerializer):
 #定义给测试接口列表获取关联用例的序列化器，以便接口列表可以返回关联的case字段
 class TestInterfaceExrendListSerializer(serializers.ModelSerializer):
     #使用测试用例的Te，stInterfaceCaseListSerializer序列化器返回id和title，source传入测试用例模型TestInterfaceCaseModel集
-    cases = TestInterfaceCaseListSerializer(read_only=True, many=True, source="testinterfacecasemodel_set")
+    cases = TestInterfaceCaseListSerializer()
 
     class Meta:
         model = TestInterface

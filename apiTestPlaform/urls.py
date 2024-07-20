@@ -18,7 +18,7 @@ from TestTasks.views import TestTaskViewSet, TestRecordView, TestReportView
 from django.contrib import admin
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
-from TestScenes.views import UpdateSceneCaseOrderView
+from TestScenes.views import UpdateSceneCaseOrderView,ScenesViewSet
 from TestInterface.views import TestInterfaceCaseViewSet
 
 from users.views import LoginView
@@ -37,6 +37,10 @@ urlpatterns = [
     path("api/TestInterface/case_run/",TestInterfaceCaseViewSet.as_view({
         "post":"run_case"
     }),name="run_case"),
+    # 注册测试场景运行的接口路由，指定post请求api/testFlow/scenes_run/时候，映射UpdateSceneCaseOrderView中的scenes_run方法
+    path("api/testFlow/scenes_run/",ScenesViewSet.as_view({
+        "post":"scenes_run"
+    }),name="scenes_run"),
 
 ]
 
