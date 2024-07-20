@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     "TestScenes",
     "TestInterface",
     "Testproject",
-    "TestTask",
+    "TestTasks",
     "users",
     # 注册jwt鉴权模块
     "rest_framework_simplejwt",

@@ -14,10 +14,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from TestTasks.views import TestTaskViewSet, TestRecordView, TestReportView
 from django.contrib import admin
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from TestScenes.views import UpdateSceneCaseOrderView
+from TestInterface.views import TestInterfaceCaseViewSet
 
 from users.views import LoginView
 
@@ -31,6 +33,10 @@ urlpatterns = [
     path('api/users/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     #注册修改业务流用例顺序的接口路由
     path('api/testFlow/update_scenes_case_order/', UpdateSceneCaseOrderView.as_view(), name='update_scenes_case_order'),
+    #注册接口用例运行的接口路由，指定post请求api/TestInterface/case_run/时候，映射TestInterfaceCaseViewSet中的run_case方法
+    path("api/TestInterface/case_run/",TestInterfaceCaseViewSet.as_view({
+        "post":"run_case"
+    }),name="run_case"),
 
 ]
 
@@ -56,6 +62,14 @@ routers.register('api/TestInterface/case',TestInterfaceCaseViewSet)
 routers.register('api/testFlow/scenes',ScenesViewSet)
 #注册业务流用例管理路由
 routers.register('api/testFlow/cases',SceneToCaseViewSet)
+#注册测试任务管理模块的路由
+routers.register("api/testTask/task",TestTaskViewSet)
+#注册测试记录接口的路由
+routers.register("api/testTask/records",TestRecordView)
+#注册测试报告接口的路由
+routers.register("api/testTask/records/reports",TestReportView)
+
+
 
 
 
