@@ -33,6 +33,7 @@ urlpatterns = [
 
 # 导入drf的router和自定义的视图集
 from Testproject.views import TestProjectView,TestEnvView,TestFileView
+from TestInterface.views import TestInterfaceView,TestInterfaceCaseViewSet
 from rest_framework import routers
 
 # 实例化louters
@@ -43,6 +44,11 @@ routers.register("api/testPro/projects", TestProjectView)
 routers.register("api/testPro/envs", TestEnvView)
 #注册上传文件接口路由
 routers.register("api/testPro/files", TestFileView)
+#z注册测试接口增删改查接口路由
+routers.register('api/TestInterface/interface',TestInterfaceView)
+#注册接口测试用例管理的路由
+routers.register('api/TestInterface/case',TestInterfaceCaseViewSet)
+
 
 
 
