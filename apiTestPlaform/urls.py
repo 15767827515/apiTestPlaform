@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from Cronjob.views import CronjobViewSet
 from TestTasks.views import TestTaskViewSet, TestRecordView, TestReportView
 from django.contrib import admin
 from django.urls import path
@@ -75,6 +76,8 @@ routers.register("api/testTask/task",TestTaskViewSet)
 routers.register("api/testTask/records",TestRecordView)
 #注册测试报告接口的路由
 routers.register("api/testTask/records/reports",TestReportView)
+
+routers.register("api/cronjob",CronjobViewSet)
 
 
 

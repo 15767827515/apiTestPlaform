@@ -1,6 +1,7 @@
 from ApiTestEngine.core2.cases import run_test
 from TestScenes.models import SceneToCase
 from TestScenes.serializer import SceneToCaseListSerializer
+from TestTasks.celery_tasks import  run_taskcase_celry
 from Testproject.models import TestEnv
 from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets, permissions, generics, mixins, status
@@ -33,53 +34,10 @@ class TestTaskViewSet(viewsets.ModelViewSet):
             return Response({'error': 'env_id is empty'}, status=status.HTTP_400_BAD_REQUEST)
         if not task_id:
             return Response({'error': 'task_id is empty'}, status=status.HTTP_400_BAD_REQUEST)
-        # 获取env数据，,如果没有找到返回404
-        env = get_object_or_404(TestEnv, id=env_id)
-        # 拼装env_config参数
-        env_config = {
-            'ENV': {
-                'host': env.host,
-                'headers': env.headers,
-                **env.global_variable,
-
-            },
-            'DB': '',
-            'global_func': env.global_func
-        }
-        # 获取task对象,如果没有找到返回404
-        task = get_object_or_404(TestTaskModel, id=task_id)
-        # 获取与该任务关联的所有场景
-        scens_list = task.scenes.all()
-        task_case_data = []
-        for scene in scens_list:
-            # 返回与当前 scene 相关的所有 SceneToCase 对象
-            cases = scene.scenetocase_set.all()
-            res = SceneToCaseListSerializer(cases, many=True).data
-            sorted_res = sorted(res, key=lambda k: k['sort'])
-            scene_case_list = [item["case"] for item in sorted_res]
-            task_case_data.append(
-                {
-                    "name": scene.name,
-                    "Cases": scene_case_list
-                }
-            )
-        # 初始化创建TestRecordModel测试记录对象
-        record_obj = TestRecordModel.objects.create(task=task, env=env, tester=request.user.username, status="执行中")
-
-        result = run_test(case_data=task_case_data, env_config=env_config, debug=False)
-        # 执行完任务运行后，更新TestRecordModel实例对应的属性
-        record_obj.all = result["all"]
-        record_obj.success = result["success"]
-        record_obj.error = result["error"]
-        record_obj.fail = result["fail"]
-        record_obj.pass_rate = "{:.2f}".format(result["success"] / result["all"])
-        record_obj.status = "执行完成"
-        record_obj.save()
-        # c初始化TestReport实例，保存测试报告数据到info
-        report_obj = TestReport.objects.create(record=record_obj, info=result)
-        report_obj.save()
-
-        return Response(result)
+        tester=request.user.username
+        #异步调用run_taskcase_celry方法
+        run_taskcase_celry.delay(env_id, task_id, tester)
+        return Response({"message": "测试计划成功运行，请等待运行结果！"}, status=status.HTTP_200_OK)
 
 
 from django_filters import rest_framework as filters

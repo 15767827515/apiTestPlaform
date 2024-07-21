@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'django-insecure-*%ql81^j+ej-ck_1qotr*x#*j-!i3s0^9-w80r*8he41-&$lj5
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -49,8 +47,10 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "rest_framework",
     "rest_framework.authtoken",
-    #注册django-filter
-    "django_filters"
+    # 注册django-filter
+    "django_filters",
+    # 注册定时任务django_celery_beat插件
+    "django_celery_beat",
 
 ]
 
@@ -85,7 +85,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'apiTestPlaform.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
@@ -93,13 +92,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': "auto_test",
-        "USER":"root",
-        "PASSWORD":"admin123456",
-        "PORT":"3306",
-        "HOST":"localhost"
+        "USER": "root",
+        "PASSWORD": "admin123456",
+        "PORT": "3306",
+        "HOST": "localhost"
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -119,7 +117,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -130,7 +127,6 @@ TIME_ZONE = 'Asia/shanghai'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -144,7 +140,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # 配置鉴权登录方式
 REST_FRAMEWORK = {
-    #配置jwt鉴权方式
+    # 配置jwt鉴权方式
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.TokenAuthentication',
@@ -153,21 +149,22 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
-    #配置drf过滤器
-    'DEFAULT_FILTER_BACKENDS':[
+    # 配置drf过滤器
+    'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'
     ]
 }
 
 # 配置token有效期
 from datetime import timedelta
+
 ...
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1500),    # 令牌的有效时间
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),           #刷新令牌的时间
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1500),  # 令牌的有效时间
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),  # 刷新令牌的时间
     "ROTATE_REFRESH_TOKENS": False,
-    "BLACKLIST_AFTER_ROTATION": True,      #若为true 则把之前的token假如黑名单
+    "BLACKLIST_AFTER_ROTATION": True,  # 若为true 则把之前的token假如黑名单
     "UPDATE_LAST_LOGIN": False,
     "ALGORITHM": "HS256",
     "SIGNING_KEY": SECRET_KEY,
@@ -177,11 +174,22 @@ SIMPLE_JWT = {
     "JSON_ENCODER": None,
     "JWK_URL": None,
     "LEEWAY": 0,
-    "AUTH_HEADER_TYPES": ("Bearer",),           #  Authorizetion：Bearner
+    "AUTH_HEADER_TYPES": ("Bearer",),  # Authorizetion：Bearner
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
     "USER_ID_FIELD": "id",
     "USER_ID_CLAIM": "user_id",
 
 }
 
-MEDIA_ROOT=BASE_DIR/"Files"
+MEDIA_ROOT = BASE_DIR / "Files"
+
+# celery定时任务配置
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/1'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_TIMEZONE = 'Asia/Shanghai'
+CELERY_ENABLE_UTC = False
+
+#指定调度器执行类
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
