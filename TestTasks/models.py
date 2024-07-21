@@ -31,7 +31,7 @@ class TestRecordModel(models.Model):
     pass_rate = models.CharField(max_length=20,help_text='用例通过率', verbose_name='用例通过率', default='0', blank=True, null=True)
     tester = models.CharField(max_length=50,help_text='执行者', verbose_name='执行者', blank=True, null=True)
     status = models.CharField(max_length=30,help_text='执行状态', verbose_name='执行状态')
-    create_time = models.DateTimeField(auto_created=True, help_text='执行时间', verbose_name='执行时间')
+    create_time = models.DateTimeField(auto_created=True, help_text='执行时间', verbose_name='执行时间',auto_now_add=True)
 
     def __str__(self):
         return self.task.name

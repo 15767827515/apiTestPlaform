@@ -164,7 +164,7 @@ from datetime import timedelta
 ...
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=180),    # 令牌的有效时间
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1500),    # 令牌的有效时间
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),           #刷新令牌的时间
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": True,      #若为true 则把之前的token假如黑名单

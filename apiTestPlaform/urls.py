@@ -34,14 +34,17 @@ urlpatterns = [
     #注册修改业务流用例顺序的接口路由
     path('api/testFlow/update_scenes_case_order/', UpdateSceneCaseOrderView.as_view(), name='update_scenes_case_order'),
     #注册接口用例运行的接口路由，指定post请求api/TestInterface/case_run/时候，映射TestInterfaceCaseViewSet中的run_case方法
-    path("api/TestInterface/case_run/",TestInterfaceCaseViewSet.as_view({
+    path("api/TestInterface/case/run/",TestInterfaceCaseViewSet.as_view({
         "post":"run_case"
     }),name="run_case"),
     # 注册测试场景运行的接口路由，指定post请求api/testFlow/scenes_run/时候，映射UpdateSceneCaseOrderView中的scenes_run方法
-    path("api/testFlow/scenes_run/",ScenesViewSet.as_view({
+    path("api/testFlow/scenes/run/",ScenesViewSet.as_view({
         "post":"scenes_run"
     }),name="scenes_run"),
-
+    # 注册测试任务运行的接口路由，指定post请求api/testTask/task/run/时候，映射TestTaskViewSetw中的run_task方法
+    path("api/testTask/task/run/",TestTaskViewSet.as_view({
+        "post":"run_task"
+    }),name="run_task"),
 ]
 
 # 导入drf的router和自定义的视图集
