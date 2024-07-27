@@ -21,7 +21,7 @@ from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from TestScenes.views import UpdateSceneCaseOrderView,ScenesViewSet
 from TestInterface.views import TestInterfaceCaseViewSet
-
+from BugManage.views import BugManageViewSet
 from users.views import LoginView
 
 urlpatterns = [
@@ -76,8 +76,10 @@ routers.register("api/testTask/task",TestTaskViewSet)
 routers.register("api/testTask/records",TestRecordView)
 #注册测试报告接口的路由
 routers.register("api/testTask/records/reports",TestReportView)
-
+#注册定时任务模块的路由
 routers.register("api/cronjob",CronjobViewSet)
+#注册BUG 管理模块的接口路由
+routers.register('api/bug/bugs',BugManageViewSet)
 
 
 

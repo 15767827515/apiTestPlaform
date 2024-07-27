@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     "django_filters",
     # 注册定时任务django_celery_beat插件
     "django_celery_beat",
+    # 注册支持跨域请求的依赖
+    "corsheaders",
 
 ]
 
@@ -58,7 +60,8 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
+    "corsheaders.middleware.CorsMiddleware"
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -191,5 +194,9 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_TIMEZONE = 'Asia/Shanghai'
 CELERY_ENABLE_UTC = False
 
-#指定调度器执行类
+# 指定调度器执行类
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+# 前端跨域请求的配置
+CORS_ALLOW_CREDENTIALS = True  # 后端支持跨域访问中使用cookie
+CORS_ORIGIN_ALLOW_ALL = True  # 允许所有用户访问
